@@ -1,0 +1,40 @@
+version: '3.3'
+services:
+  json_server:
+    container_name: json-server
+    restart: always
+    image: json-server
+    hostname: json-server
+    command: --watch db.json
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      args:
+          PORT_ARG: 3000
+    ports:
+      - "3000:3000"
+    networks:
+      - network
+    volumes:
+      - ./backend:/app
+  frontend:
+    container_name: frontend
+    restart: always
+    image: frontend
+    hostname: frontend
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      args:
+          PORT_ARG: 3001
+    ports:
+      - "3001:3001"
+    networks:
+      - network
+    volumes:
+      - ./frontend:/app
+
+volumes:
+  json_server_data:
+networks:
+  network:
